@@ -2,6 +2,9 @@
 
 error_reporting(E_ALL);
 
+// Just 4 Fun
+$startTime = microtime(true);
+
 // Load the libraries
 include('./libraries/php/core/Command.php');
 include('./libraries/php/core/Data.php');

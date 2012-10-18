@@ -33,6 +33,9 @@ define('MYSQL_BIN', '/usr/bin/mysql');
 // The path of log file
 define('LOG_FILE', PATH.'/logs/.log');
 
+// The path of cache file
+define('CACHE_FILE', PATH.'/tmp/.cache');
+
 // The maintenance module
 define('MAINTENANCE_MODE', 'disabled');
 define('ESTIMATED_END_TIME', 'tomorrow');
