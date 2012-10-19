@@ -1,45 +1,50 @@
 <?php
 
-/*
- * Usage : 
- * if(!$foo = Cache::read()){
- *   $foo = 'bar';
- *   Cache::write($foo);
- * }
- **/
-
-abstract class Cache{
+class Cache{
 
 	const DURATION = 3600; // 1 hour
 
-	public static function write($content){
+	private $filename;
+
+	public function __construct($filename){
+		$this->filename = $filename;
+	}
+
+	public function write($content){
 		if(is_array($content)){
 			$content = serialize($content);
 		}
-		file_put_contents(CACHE_FILE, $content);
+		file_put_contents(CACHE_DIR.'/'.$this->filename, $content);
 	}
 
-	public static function read($array = false){
+	public function read($array = false){
 		$content = '';
 
-		if(!file_exists(CACHE_FILE))
+		if(!file_exists(CACHE_DIR.'/'.$this->filename))
 			return false;
 
 		if(time() - filemtime(filename) > 3600)
 			return false;
 
 		if($array){
-			$content = unserialize(file_get_contents(CACHE_FILE));
+			$content = unserialize(file_get_contents(CACHE_DIR.'/'.$this->filename));
 		}
 		else{
-			$content = file_get_contents(CACHE_FILE);
+			$content = file_get_contents(CACHE_DIR.'/'.$this->filename);
 		}
 		return $content;
 	}
 
+	public function delete(){
+		if(file_exists(CACHE_DIR.'/'.$this->filename))
+			unlink(CACHE_DIR.'/'.$this->filename);
+	}
+
 	public static function clear(){
-		if(file_exists(CACHE_FILE))
-			unlink(CACHE_FILE);
+		$files = glob(CACHE_DIR.'/*');
+		foreach($files as $f){
+			unlink($f);
+		}
 	}
 
 }
